@@ -1,90 +1,383 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multi-Vendor Marketplace</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoldMart — Multi-Vendor Marketplace</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#" onclick="scrollToSection('home')">
+        <span class="brand-mark"></span>
+        <span class="brand-text">GoldMart</span>
+      </a>
 
-<header class="topbar">
-  <div class="container topbar-inner">
-    <strong>🛒 MyMarketplace</strong>
-    <nav>
-      <button onclick="scrollToSection('products')">Products</button>
-      <button onclick="scrollToSection('vendor')">Vendor</button>
-      <button onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
-    </nav>
+      <nav class="nav">
+        <button class="nav-link" onclick="scrollToSection('products')">Shop</button>
+        <button class="nav-link" onclick="scrollToSection('vendor')">Vendor</button>
+        <button class="nav-link" onclick="scrollToSection('checkout')">Checkout</button>
+      </nav>
+
+      <div class="actions">
+        <div class="search">
+          <input id="searchInput" type="search" placeholder="Search products…" />
+        </div>
+
+        <button class="cart-btn" id="cartOpenBtn" aria-label="Open cart">
+          🛒 <span id="cartCount" class="pill">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="home" class="hero">
+    <div class="container hero-inner">
+      <div class="hero-left">
+        <div class="kicker">BLACK ✦ GOLD ✦ MULTI-VENDOR</div>
+        <h1>Premium Marketplace. Vendors sell. You earn commission.</h1>
+        <p>
+          A complete multi-vendor e-commerce starter with cart, checkout, vendor portal,
+          commission calculations, COD orders — and Stripe option ready.
+        </p>
+
+        <div class="hero-cta">
+          <button class="btn gold" onclick="scrollToSection('products')">Start Shopping</button>
+          <button class="btn outline" onclick="seedDemoData()">Load Demo Products</button>
+        </div>
+
+        <div class="hero-badges">
+          <span class="badge">Mobile friendly</span>
+          <span class="badge">Vendor dashboard</span>
+          <span class="badge">Commission system</span>
+          <span class="badge">COD ready</span>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <span class="mini">Live MVP</span>
+            <span class="mini">Fast UI</span>
+          </div>
+
+          <div class="hero-card-title">Today’s Store Stats</div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-num" id="statProducts">0</div>
+              <div class="stat-label">Products</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" id="statVendors">0</div>
+              <div class="stat-label">Vendors</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num" id="statCommission">10%</div>
+              <div class="stat-label">Commission</div>
+            </div>
+          </div>
+
+          <div class="hero-note">
+            Tip: Vendors can login and add products from the Vendor Portal.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Products -->
+  <section id="products" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Shop Products</h2>
+
+        <div class="filters">
+          <select id="categorySelect">
+            <option value="all">All categories</option>
+          </select>
+
+          <select id="sortSelect">
+            <option value="featured">Sort: Featured</option>
+            <option value="low">Price: Low → High</option>
+            <option value="high">Price: High → Low</option>
+            <option value="name">Name: A → Z</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="productsGrid" class="grid"></div>
+      <p id="emptyState" class="muted center hidden">No products found.</p>
+    </div>
+  </section>
+
+  <!-- Vendor Portal -->
+  <section id="vendor" class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Vendor Portal</h2>
+        <div class="sub-muted">Create a vendor shop, login, and manage your products.</div>
+      </div>
+
+      <div class="vendor-grid">
+        <!-- Auth -->
+        <div class="panel">
+          <h3 class="panel-title">Vendor Login</h3>
+          <p class="muted small">Demo auth (LocalStorage). For real app connect Firebase/Supabase.</p>
+
+          <form id="vendorLoginForm" class="form">
+            <label>
+              Email
+              <input name="email" type="email" required placeholder="vendor@email.com">
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" required placeholder="••••••••">
+            </label>
+            <button class="btn gold full" type="submit">Login</button>
+          </form>
+
+          <div class="divider"></div>
+
+          <h4>Create Vendor Account</h4>
+          <form id="vendorSignupForm" class="form">
+            <label>
+              Shop Name
+              <input name="shop" required placeholder="Your Shop Name">
+            </label>
+            <label>
+              Email
+              <input name="email" type="email" required placeholder="vendor@email.com">
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" required placeholder="Create password">
+            </label>
+            <button class="btn outline full" type="submit">Sign Up</button>
+          </form>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="panel">
+          <div class="dash-head">
+            <h3 class="panel-title">Dashboard</h3>
+            <button class="btn outline" id="vendorLogoutBtn" type="button">Logout</button>
+          </div>
+          <p class="muted small" id="vendorStatus">Not logged in</p>
+
+          <div class="divider"></div>
+
+          <h4>Add Product</h4>
+          <form id="vendorProductForm" class="form">
+            <div class="row">
+              <label>
+                Product Name
+                <input name="name" required placeholder="Product name">
+              </label>
+              <label>
+                Price (Rs)
+                <input name="price" type="number" required min="1" placeholder="1999">
+              </label>
+            </div>
+
+            <div class="row">
+              <label>
+                Category
+                <input name="category" required placeholder="Fashion / Electronics">
+              </label>
+              <label>
+                Image URL
+                <input name="img" required placeholder="https://...">
+              </label>
+            </div>
+
+            <label>
+              Description
+              <input name="desc" required placeholder="Short description">
+            </label>
+
+            <div class="row">
+              <label>
+                Publish
+                <select name="published" required>
+                  <option value="yes">Yes (Visible)</option>
+                  <option value="no">No (Hidden)</option>
+                </select>
+              </label>
+              <label>
+                Featured
+                <select name="featured" required>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </label>
+            </div>
+
+            <button class="btn gold full" type="submit">Save Product</button>
+          </form>
+
+          <div class="divider"></div>
+
+          <h4>Your Products</h4>
+          <div id="vendorProductsList" class="vendor-list"></div>
+
+          <div class="divider"></div>
+
+          <h4>Your Orders (COD saved locally)</h4>
+          <div id="vendorOrdersList" class="vendor-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Checkout -->
+  <section id="checkout" class="section">
+    <div class="container checkout">
+      <div class="checkout-left">
+        <h2>Checkout</h2>
+        <p class="muted">Cash on Delivery works on GitHub Pages. Stripe Card requires a small backend.</p>
+
+        <form id="checkoutForm" class="form">
+          <div class="row">
+            <label>
+              Full Name
+              <input required name="name" placeholder="Your name">
+            </label>
+            <label>
+              Phone
+              <input required name="phone" placeholder="+977...">
+            </label>
+          </div>
+
+          <label>
+            Address
+            <input required name="address" placeholder="Street, City, Country">
+          </label>
+
+          <div class="row">
+            <label>
+              Delivery
+              <select name="delivery" required>
+                <option value="standard">Standard (Free)</option>
+                <option value="express">Express (Rs 200)</option>
+              </select>
+            </label>
+
+            <label>
+              Payment
+              <select name="payment" required>
+                <option value="cod">Cash on Delivery</option>
+                <option value="card">Card (Stripe)</option>
+              </select>
+            </label>
+          </div>
+
+          <button class="btn gold full" type="submit">Place Order</button>
+          <p class="muted small">Tip: add items to cart first, then checkout.</p>
+        </form>
+      </div>
+
+      <aside class="checkout-right">
+        <h3>Order Summary</h3>
+        <div id="summaryItems" class="summary"></div>
+
+        <div class="summary-line">
+          <span>Subtotal</span>
+          <strong id="summarySubtotal">Rs 0</strong>
+        </div>
+
+        <div class="summary-line">
+          <span>Platform Commission</span>
+          <strong id="summaryCommission">Rs 0</strong>
+        </div>
+
+        <div class="summary-line">
+          <span>Delivery</span>
+          <strong id="summaryDelivery">Rs 0</strong>
+        </div>
+
+        <div class="summary-line total">
+          <span>Total</span>
+          <strong id="summaryTotal">Rs 0</strong>
+        </div>
+
+        <button class="btn outline full" id="summaryGoCart" type="button">Edit Cart</button>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Product Modal -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-card">
+      <button class="icon-btn" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal-body">
+        <img id="modalImg" alt="">
+        <div>
+          <h3 id="modalName"></h3>
+          <p id="modalDesc" class="muted"></p>
+
+          <div class="price-row">
+            <div class="price" id="modalPrice"></div>
+            <span class="tag" id="modalCat"></span>
+          </div>
+
+          <div class="seller-row">
+            <span class="muted small">Seller:</span>
+            <strong id="modalSeller"></strong>
+          </div>
+
+          <button class="btn gold" id="modalAdd">Add to Cart</button>
+        </div>
+      </div>
+    </div>
   </div>
-</header>
 
-<!-- PRODUCTS -->
-<section id="products" class="section">
-  <div class="container">
-    <h2>Products</h2>
-    <div id="productsGrid" class="grid"></div>
-  </div>
-</section>
-
-<!-- VENDOR PORTAL -->
-<section id="vendor" class="section">
-  <div class="container vendor-grid">
-
-    <!-- LOGIN / SIGNUP -->
-    <div class="panel">
-      <h3>Vendor Login</h3>
-      <form id="vendorLoginForm">
-        <input name="email" type="email" placeholder="Email" required>
-        <input name="password" type="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-      </form>
-
-      <h4>Create Vendor Account</h4>
-      <form id="vendorSignupForm">
-        <input name="shop" placeholder="Shop Name" required>
-        <input name="email" type="email" placeholder="Email" required>
-        <input name="password" type="password" placeholder="Password" required>
-        <button type="submit">Sign Up</button>
-      </form>
+  <!-- Cart Drawer -->
+  <aside id="cart" class="cart hidden" aria-label="Shopping cart">
+    <div class="cart-head">
+      <h3>Your Cart</h3>
+      <button class="icon-btn" id="cartCloseBtn" aria-label="Close cart">✕</button>
     </div>
 
-    <!-- DASHBOARD -->
-    <div class="panel">
-      <h3>Vendor Dashboard</h3>
-      <p id="vendorStatus">Not logged in</p>
-      <button id="vendorLogoutBtn">Logout</button>
+    <div id="cartItems" class="cart-items"></div>
+    <p id="cartEmpty" class="muted center hidden">Your cart is empty.</p>
 
-      <h4>Add Product</h4>
-      <form id="vendorProductForm">
-        <input name="name" placeholder="Product name" required>
-        <input name="price" type="number" placeholder="Price" required>
-        <input name="category" placeholder="Category" required>
-        <input name="img" placeholder="Image URL" required>
-        <input name="desc" placeholder="Description" required>
-        <select name="published">
-          <option value="yes">Publish</option>
-          <option value="no">Hide</option>
-        </select>
-        <button type="submit">Save Product</button>
-      </form>
-
-      <h4>Your Products</h4>
-      <div id="vendorProductsList"></div>
+    <div class="cart-breakdown">
+      <div class="line">
+        <span>Subtotal</span>
+        <strong id="cartSubtotal">Rs 0</strong>
+      </div>
+      <div class="line">
+        <span>Platform Commission</span>
+        <strong id="cartCommission">Rs 0</strong>
+      </div>
+      <div class="line total">
+        <span>Total (without delivery)</span>
+        <strong id="cartTotal">Rs 0</strong>
+      </div>
     </div>
 
-  </div>
-</section>
+    <div class="cart-foot">
+      <button class="btn gold full" onclick="scrollToSection('checkout'); closeCart();">Checkout</button>
+      <button class="btn outline full" id="clearCartBtn" type="button">Clear Cart</button>
+    </div>
+  </aside>
 
-<!-- CART -->
-<div id="cart" class="cart hidden">
-  <h3>Cart</h3>
-  <div id="cartItems"></div>
-  <strong>Total: Rs <span id="cartTotal">0</span></strong>
-  <button onclick="clearCart()">Clear</button>
-</div>
+  <!-- Toast -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
-<script src="script.js"></script>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> GoldMart. Multi-Vendor Marketplace.</p>
+      <p class="muted">Black & Gold theme • COD ready • Stripe optional</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
