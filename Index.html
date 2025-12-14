@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#07070a" />
   <title>GoldMart — Multi-Vendor Marketplace</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -11,23 +12,23 @@
   <!-- Topbar -->
   <header class="topbar">
     <div class="container topbar-inner">
-      <a class="brand" href="#" onclick="scrollToSection('home')">
+      <a class="brand" href="#" onclick="scrollToSection('home'); return false;">
         <span class="brand-mark"></span>
         <span class="brand-text">GoldMart</span>
       </a>
 
       <nav class="nav">
-        <button class="nav-link" onclick="scrollToSection('products')">Shop</button>
-        <button class="nav-link" onclick="scrollToSection('vendor')">Vendor</button>
-        <button class="nav-link" onclick="scrollToSection('checkout')">Checkout</button>
+        <button class="nav-link" type="button" onclick="scrollToSection('products')">Shop</button>
+        <button class="nav-link" type="button" onclick="scrollToSection('vendor')">Vendor</button>
+        <button class="nav-link" type="button" onclick="scrollToSection('checkout')">Checkout</button>
       </nav>
 
       <div class="actions">
         <div class="search">
-          <input id="searchInput" type="search" placeholder="Search products…" />
+          <input id="searchInput" type="search" placeholder="Search products…" autocomplete="off" />
         </div>
 
-        <button class="cart-btn" id="cartOpenBtn" aria-label="Open cart">
+        <button class="cart-btn" id="cartOpenBtn" type="button" aria-label="Open cart">
           🛒 <span id="cartCount" class="pill">0</span>
         </button>
       </div>
@@ -41,13 +42,13 @@
         <div class="kicker">BLACK ✦ GOLD ✦ MULTI-VENDOR</div>
         <h1>Premium Marketplace. Vendors sell. You earn commission.</h1>
         <p>
-          A complete multi-vendor e-commerce starter with cart, checkout, vendor portal,
-          commission calculations, COD orders — and Stripe option ready.
+          Multi-vendor e-commerce with vendor portal, cart, checkout, commission per vendor,
+          COD orders, and Stripe-ready card option.
         </p>
 
         <div class="hero-cta">
-          <button class="btn gold" onclick="scrollToSection('products')">Start Shopping</button>
-          <button class="btn outline" onclick="seedDemoData()">Load Demo Products</button>
+          <button class="btn gold" type="button" onclick="scrollToSection('products')">Start Shopping</button>
+          <button class="btn outline" type="button" onclick="seedDemoData()">Load Demo Products</button>
         </div>
 
         <div class="hero-badges">
@@ -70,7 +71,7 @@
           <div class="stats">
             <div class="stat">
               <div class="stat-num" id="statProducts">0</div>
-              <div class="stat-label">Products</div>
+              <div class="stat-label">Published Products</div>
             </div>
             <div class="stat">
               <div class="stat-num" id="statVendors">0</div>
@@ -127,16 +128,16 @@
         <!-- Auth -->
         <div class="panel">
           <h3 class="panel-title">Vendor Login</h3>
-          <p class="muted small">Demo auth (LocalStorage). For real app connect Firebase/Supabase.</p>
+          <p class="muted small">Demo auth (LocalStorage). Use real auth for production.</p>
 
           <form id="vendorLoginForm" class="form">
             <label>
               Email
-              <input name="email" type="email" required placeholder="vendor@email.com">
+              <input name="email" type="email" required placeholder="vendor@email.com" />
             </label>
             <label>
               Password
-              <input name="password" type="password" required placeholder="••••••••">
+              <input name="password" type="password" required placeholder="••••••••" />
             </label>
             <button class="btn gold full" type="submit">Login</button>
           </form>
@@ -147,15 +148,15 @@
           <form id="vendorSignupForm" class="form">
             <label>
               Shop Name
-              <input name="shop" required placeholder="Your Shop Name">
+              <input name="shop" required placeholder="Your Shop Name" />
             </label>
             <label>
               Email
-              <input name="email" type="email" required placeholder="vendor@email.com">
+              <input name="email" type="email" required placeholder="vendor@email.com" />
             </label>
             <label>
               Password
-              <input name="password" type="password" required placeholder="Create password">
+              <input name="password" type="password" minlength="6" required placeholder="Create password" />
             </label>
             <button class="btn outline full" type="submit">Sign Up</button>
           </form>
@@ -176,28 +177,28 @@
             <div class="row">
               <label>
                 Product Name
-                <input name="name" required placeholder="Product name">
+                <input name="name" required placeholder="Product name" />
               </label>
               <label>
                 Price (Rs)
-                <input name="price" type="number" required min="1" placeholder="1999">
+                <input name="price" type="number" required min="1" step="1" placeholder="1999" />
               </label>
             </div>
 
             <div class="row">
               <label>
                 Category
-                <input name="category" required placeholder="Fashion / Electronics">
+                <input name="category" required placeholder="Fashion / Electronics" />
               </label>
               <label>
                 Image URL
-                <input name="img" required placeholder="https://...">
+                <input name="img" required placeholder="https://..." />
               </label>
             </div>
 
             <label>
               Description
-              <input name="desc" required placeholder="Short description">
+              <input name="desc" required placeholder="Short description" />
             </label>
 
             <div class="row">
@@ -227,7 +228,7 @@
 
           <div class="divider"></div>
 
-          <h4>Your Orders (COD saved locally)</h4>
+          <h4>Your Orders</h4>
           <div id="vendorOrdersList" class="vendor-list"></div>
         </div>
       </div>
@@ -239,23 +240,23 @@
     <div class="container checkout">
       <div class="checkout-left">
         <h2>Checkout</h2>
-        <p class="muted">Cash on Delivery works on GitHub Pages. Stripe Card requires a small backend.</p>
+        <p class="muted">COD works on GitHub Pages. Card (Stripe) needs a small backend.</p>
 
         <form id="checkoutForm" class="form">
           <div class="row">
             <label>
               Full Name
-              <input required name="name" placeholder="Your name">
+              <input required name="name" placeholder="Your name" />
             </label>
             <label>
               Phone
-              <input required name="phone" placeholder="+977...">
+              <input required name="phone" placeholder="+977..." />
             </label>
           </div>
 
           <label>
             Address
-            <input required name="address" placeholder="Street, City, Country">
+            <input required name="address" placeholder="Street, City, Country" />
           </label>
 
           <div class="row">
@@ -277,7 +278,7 @@
           </div>
 
           <button class="btn gold full" type="submit">Place Order</button>
-          <p class="muted small">Tip: add items to cart first, then checkout.</p>
+          <p class="muted small">Tip: Add items to cart first, then checkout.</p>
         </form>
       </div>
 
@@ -314,9 +315,9 @@
   <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-backdrop" id="modalBackdrop"></div>
     <div class="modal-card">
-      <button class="icon-btn" id="modalClose" aria-label="Close">✕</button>
+      <button class="icon-btn" id="modalClose" aria-label="Close" type="button">✕</button>
       <div class="modal-body">
-        <img id="modalImg" alt="">
+        <img id="modalImg" alt="" />
         <div>
           <h3 id="modalName"></h3>
           <p id="modalDesc" class="muted"></p>
@@ -331,7 +332,7 @@
             <strong id="modalSeller"></strong>
           </div>
 
-          <button class="btn gold" id="modalAdd">Add to Cart</button>
+          <button class="btn gold" id="modalAdd" type="button">Add to Cart</button>
         </div>
       </div>
     </div>
@@ -341,7 +342,7 @@
   <aside id="cart" class="cart hidden" aria-label="Shopping cart">
     <div class="cart-head">
       <h3>Your Cart</h3>
-      <button class="icon-btn" id="cartCloseBtn" aria-label="Close cart">✕</button>
+      <button class="icon-btn" id="cartCloseBtn" aria-label="Close cart" type="button">✕</button>
     </div>
 
     <div id="cartItems" class="cart-items"></div>
@@ -363,7 +364,7 @@
     </div>
 
     <div class="cart-foot">
-      <button class="btn gold full" onclick="scrollToSection('checkout'); closeCart();">Checkout</button>
+      <button class="btn gold full" type="button" onclick="scrollToSection('checkout'); closeCart();">Checkout</button>
       <button class="btn outline full" id="clearCartBtn" type="button">Clear Cart</button>
     </div>
   </aside>
