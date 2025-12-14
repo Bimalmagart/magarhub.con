@@ -1,227 +1,90 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MyShop — Simple E-commerce</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Vendor Marketplace</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <!-- Top bar -->
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a class="brand" href="#" onclick="scrollToSection('home')">
-        <span class="brand-dot"></span> MyShop
-      </a>
 
-      <nav class="nav">
-        <button class="nav-link" onclick="scrollToSection('home')">Home</button>
-        <button class="nav-link" onclick="scrollToSection('products')">Products</button>
-        <button class="nav-link" onclick="scrollToSection('checkout')">Checkout</button>
-      </nav>
-
-      <div class="actions">
-        <div class="search">
-          <input id="searchInput" type="search" placeholder="Search products…" />
-        </div>
-
-        <button class="cart-btn" id="cartOpenBtn" aria-label="Open cart">
-          🛒 <span id="cartCount" class="pill">0</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <main id="home" class="hero">
-    <div class="container hero-inner">
-      <div class="hero-left">
-        <h1>Sell anything with a clean, fast store.</h1>
-        <p>
-          A modern e-commerce starter: product grid, cart, and checkout UI.
-          No backend required (yet).
-        </p>
-        <div class="hero-cta">
-          <button class="btn primary" onclick="scrollToSection('products')">Shop Now</button>
-          <button class="btn ghost" onclick="seedDemoData()">Load Demo Products</button>
-        </div>
-        <div class="hero-badges">
-          <span class="badge">Mobile-friendly</span>
-          <span class="badge">Fast</span>
-          <span class="badge">No framework</span>
-        </div>
-      </div>
-
-      <div class="hero-right">
-        <div class="hero-card">
-          <div class="hero-card-top">
-            <div class="mini-pill">Featured</div>
-            <div class="rating">⭐ 4.9</div>
-          </div>
-          <div class="hero-card-title">Premium Store UI</div>
-          <div class="hero-card-sub">Add your products and go live.</div>
-          <div class="hero-card-row">
-            <div class="stat">
-              <div class="stat-num" id="heroProducts">0</div>
-              <div class="stat-label">Products</div>
-            </div>
-            <div class="stat">
-              <div class="stat-num">24/7</div>
-              <div class="stat-label">Open</div>
-            </div>
-            <div class="stat">
-              <div class="stat-num">1-Click</div>
-              <div class="stat-label">Cart</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Products -->
-  <section id="products" class="section">
-    <div class="container">
-      <div class="section-head">
-        <h2>Products</h2>
-        <div class="filters">
-          <select id="categorySelect">
-            <option value="all">All categories</option>
-          </select>
-
-          <select id="sortSelect">
-            <option value="featured">Sort: Featured</option>
-            <option value="low">Price: Low → High</option>
-            <option value="high">Price: High → Low</option>
-            <option value="name">Name: A → Z</option>
-          </select>
-        </div>
-      </div>
-
-      <div id="productsGrid" class="grid"></div>
-      <p id="emptyState" class="muted center hidden">No products found.</p>
-    </div>
-  </section>
-
-  <!-- Checkout -->
-  <section id="checkout" class="section">
-    <div class="container checkout">
-      <div class="checkout-left">
-        <h2>Checkout</h2>
-        <p class="muted">Demo checkout (no real payment yet). You can connect Stripe later.</p>
-
-        <form id="checkoutForm" class="form">
-          <div class="row">
-            <label>
-              Full Name
-              <input required name="name" placeholder="Your name" />
-            </label>
-            <label>
-              Phone
-              <input required name="phone" placeholder="+977..." />
-            </label>
-          </div>
-
-          <label>
-            Email
-            <input type="email" required name="email" placeholder="you@example.com" />
-          </label>
-
-          <label>
-            Address
-            <input required name="address" placeholder="Street, City, Country" />
-          </label>
-
-          <div class="row">
-            <label>
-              Delivery
-              <select name="delivery" required>
-                <option value="standard">Standard (Free)</option>
-                <option value="express">Express</option>
-              </select>
-            </label>
-
-            <label>
-              Payment
-              <select name="payment" required>
-                <option value="cod">Cash on Delivery</option>
-                <option value="card" disabled>Card (coming soon)</option>
-              </select>
-            </label>
-          </div>
-
-          <button class="btn primary full" type="submit">Place Order</button>
-          <p class="muted small">Tip: Open cart and add products first.</p>
-        </form>
-      </div>
-
-      <aside class="checkout-right">
-        <h3>Order Summary</h3>
-        <div id="summaryItems" class="summary"></div>
-        <div class="summary-line">
-          <span>Subtotal</span>
-          <strong id="summarySubtotal">0</strong>
-        </div>
-        <div class="summary-line">
-          <span>Delivery</span>
-          <strong id="summaryDelivery">0</strong>
-        </div>
-        <div class="summary-line total">
-          <span>Total</span>
-          <strong id="summaryTotal">0</strong>
-        </div>
-        <button class="btn ghost full" id="summaryGoCart">Edit Cart</button>
-      </aside>
-    </div>
-  </section>
-
-  <!-- Product Modal -->
-  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" id="modalBackdrop"></div>
-    <div class="modal-card">
-      <button class="icon-btn" id="modalClose" aria-label="Close">✕</button>
-      <div class="modal-body">
-        <img id="modalImg" alt="" />
-        <div>
-          <h3 id="modalName"></h3>
-          <p id="modalDesc" class="muted"></p>
-          <div class="price-row">
-            <div class="price" id="modalPrice"></div>
-            <span class="tag" id="modalCat"></span>
-          </div>
-          <button class="btn primary" id="modalAdd">Add to Cart</button>
-        </div>
-      </div>
-    </div>
+<header class="topbar">
+  <div class="container topbar-inner">
+    <strong>🛒 MyMarketplace</strong>
+    <nav>
+      <button onclick="scrollToSection('products')">Products</button>
+      <button onclick="scrollToSection('vendor')">Vendor</button>
+      <button onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
+    </nav>
   </div>
+</header>
 
-  <!-- Cart Drawer -->
-  <aside id="cart" class="cart hidden" aria-label="Shopping cart">
-    <div class="cart-head">
-      <h3>Your Cart</h3>
-      <button class="icon-btn" id="cartCloseBtn" aria-label="Close cart">✕</button>
+<!-- PRODUCTS -->
+<section id="products" class="section">
+  <div class="container">
+    <h2>Products</h2>
+    <div id="productsGrid" class="grid"></div>
+  </div>
+</section>
+
+<!-- VENDOR PORTAL -->
+<section id="vendor" class="section">
+  <div class="container vendor-grid">
+
+    <!-- LOGIN / SIGNUP -->
+    <div class="panel">
+      <h3>Vendor Login</h3>
+      <form id="vendorLoginForm">
+        <input name="email" type="email" placeholder="Email" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+
+      <h4>Create Vendor Account</h4>
+      <form id="vendorSignupForm">
+        <input name="shop" placeholder="Shop Name" required>
+        <input name="email" type="email" placeholder="Email" required>
+        <input name="password" type="password" placeholder="Password" required>
+        <button type="submit">Sign Up</button>
+      </form>
     </div>
 
-    <div id="cartItems" class="cart-items"></div>
-    <p id="cartEmpty" class="muted center hidden">Your cart is empty.</p>
+    <!-- DASHBOARD -->
+    <div class="panel">
+      <h3>Vendor Dashboard</h3>
+      <p id="vendorStatus">Not logged in</p>
+      <button id="vendorLogoutBtn">Logout</button>
 
-    <div class="cart-foot">
-      <div class="cart-total">
-        <span>Total</span>
-        <strong id="cartTotal">0</strong>
-      </div>
-      <button class="btn primary full" onclick="scrollToSection('checkout'); closeCart();">Checkout</button>
-      <button class="btn ghost full" id="clearCartBtn">Clear Cart</button>
+      <h4>Add Product</h4>
+      <form id="vendorProductForm">
+        <input name="name" placeholder="Product name" required>
+        <input name="price" type="number" placeholder="Price" required>
+        <input name="category" placeholder="Category" required>
+        <input name="img" placeholder="Image URL" required>
+        <input name="desc" placeholder="Description" required>
+        <select name="published">
+          <option value="yes">Publish</option>
+          <option value="no">Hide</option>
+        </select>
+        <button type="submit">Save Product</button>
+      </form>
+
+      <h4>Your Products</h4>
+      <div id="vendorProductsList"></div>
     </div>
-  </aside>
 
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>© <span id="year"></span> MyShop. Built with HTML/CSS/JS.</p>
-      <p class="muted">Next step: connect payments + admin dashboard.</p>
-    </div>
-  </footer>
+  </div>
+</section>
 
-  <script src="script.js"></script>
+<!-- CART -->
+<div id="cart" class="cart hidden">
+  <h3>Cart</h3>
+  <div id="cartItems"></div>
+  <strong>Total: Rs <span id="cartTotal">0</span></strong>
+  <button onclick="clearCart()">Clear</button>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
